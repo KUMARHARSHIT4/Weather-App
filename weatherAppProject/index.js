@@ -6,6 +6,7 @@ const grantAccessContainer = document.querySelector(".grant-location-container")
 const searchForm = document.querySelector("[data-searchForm]");
 const loadingScreen = document.querySelector(".loading-container");
 const userInfoContainer = document.querySelector(".user-info-container");
+const undefinedScreen= document.querySelector(".undefined-screen");
 
 //initially vairables need????
 
@@ -76,12 +77,13 @@ async function fetchUserWeatherInfo(coordinates) {
         const  data = await response.json();
 
         loadingScreen.classList.remove("active");
+        undefinedScreen.classList.remove("active");
         userInfoContainer.classList.add("active");
         renderWeatherInfo(data);
     }
     catch(err) {
         loadingScreen.classList.remove("active");
-        //HW
+        alert("Failed to fetch weather information based on your location. Please check your internet connection or try again later.");
 
     }
 
@@ -119,7 +121,7 @@ function getLocation() {
         navigator.geolocation.getCurrentPosition(showPosition);
     }
     else {
-        //HW - show an alert for no gelolocation support available
+        alert("Geolocation is not supported by your browser.");
     }
 }
 
@@ -160,11 +162,20 @@ async function fetchSearchWeatherInfo(city) {
             `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
           );
         const data = await response.json();
-        loadingScreen.classList.remove("active");
-        userInfoContainer.classList.add("active");
-        renderWeatherInfo(data);
+        if(data.message =='city not found'){
+            loadingScreen.classList.remove("active");
+            undefinedScreen.classList.add("active");
+        }
+        else{
+            loadingScreen.classList.remove("active");
+            undefinedScreen.classList.remove("active");
+            userInfoContainer.classList.add("active");
+            renderWeatherInfo(data);
+        }
     }
     catch(err) {
-        //hW
+        alert("Unable to fetch weather information. Please check the city name or try again later.");
+        
+
     }
 }
