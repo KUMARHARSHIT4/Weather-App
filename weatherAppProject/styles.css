@@ -99,6 +99,15 @@ h1 {
     display: none;
 }
 
+.undefined-screen{
+    display: none;
+}
+.undefined-screen.active{
+    display: flex;
+}
+.undefined-screen img{
+    margin-top: 20px;
+}
 .loading-container.active{
     display: flex;
 }
